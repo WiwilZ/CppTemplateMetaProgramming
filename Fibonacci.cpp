@@ -18,7 +18,7 @@ template <>
 struct Fibonacci<1> : u64_constant<1> {};
 
 template<uint64_t N>
-struct Fibonacci : u64_constant<Fibonacci_v<N - 1> +Fibonacci_v<N - 2>> {};
+struct Fibonacci : u64_constant<Fibonacci_v<N - 1> + Fibonacci_v<N - 2>> {};
 
 
 static constexpr auto _94_index_seq = std::make_index_sequence<94>{};
@@ -33,7 +33,7 @@ static constexpr std::array<uint64_t, sizeof...(Is)> MakeFibonacciSequence(std::
 static constexpr auto FibonacciSequence = MakeFibonacciSequence(_94_index_seq);
 
 
-
+//动态转静态
 template <size_t I>
 constexpr bool Get_res(size_t index, uint64_t& res) {
 	if (I == index) {
@@ -45,15 +45,12 @@ constexpr bool Get_res(size_t index, uint64_t& res) {
 
 template <size_t... Is>
 [[nodiscard]] constexpr uint64_t Make_res(std::index_sequence<Is...>, size_t index) {
-
-
 	uint64_t res;
 	if ((Get_res<Is>(index, res) || ...)) {
 		return res;
 	}
 	throw std::overflow_error("The result exceeds the maximum value that a integer can represent");
 }
-
 
 constexpr uint64_t FibonacciAt(uint64_t index) {
 	return Make_res(_94_index_seq, index);
