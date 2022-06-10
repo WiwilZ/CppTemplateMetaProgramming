@@ -1,9 +1,5 @@
-#include <chrono>
 #include <iostream>
-
-
-using namespace std;
-using namespace std::chrono;
+#include <array>
 
 
 template<size_t N>
@@ -27,40 +23,36 @@ struct Fibonacci : size_t_constant<Fibonacci_v<N - 1> + Fibonacci_v<N - 2>> {};
 
 
 template <size_t... Is>
-static constexpr std::array<size_t, sizeof...(Is)> MakeFibonacciSequence(std::index_sequence<Is...>)
-{
+static constexpr std::array<size_t, sizeof...(Is)> MakeFibonacciSequence(std::index_sequence<Is...>) {
 	return { Fibonacci_v<Is>... };
 }
 
-//64Î»ÕûĞÍ×î´óÄÜ±íÊ¾µÚ200¸öFibonacciÊı£º17323038258947941269£¨20Î»Êı£©
+//64ä½æ•´å‹æœ€å¤§èƒ½è¡¨ç¤ºç¬¬200ä¸ªFibonacciæ•°ï¼š17323038258947941269ï¼ˆ20ä½æ•°ï¼‰
 static constexpr auto FibonacciSequence = MakeFibonacciSequence(std::make_index_sequence<200>());
 
 
 
 template <size_t I = 0>
-static constexpr size_t FibonacciAt(size_t idx)
-{
+static constexpr size_t FibonacciAt(size_t idx) {
 	if (I == idx)
 		return Fibonacci_v<I>;
 	return FibonacciAt<I + 1>(idx);
 }
 
 template <>
-size_t FibonacciAt<201>(size_t)
-{
+size_t FibonacciAt<201>(size_t) {
 	throw std::overflow_error("The result exceeds the maximum value that a integer can represent");
 }
 
 
 
-int main()
-{
+int main() {
 	size_t i = 200;
-	
-	cout << "The 200th Fibonacci number: " << FibonacciAt(i) << endl;
+
+	std::cout << "The 200th Fibonacci number: " << FibonacciAt(i) << std::endl;
 
 	for (auto i : FibonacciSequence)
-		cout << i << endl;
+		std::cout << i << std::endl;
 
 	return 0;
 }
